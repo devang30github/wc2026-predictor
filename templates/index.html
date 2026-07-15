@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>World Cup 2026 Final Predictor</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+<div class="floodlight"></div>
+<main class="wrap">
+  <div class="panel left-panel">
+    <p class="eyebrow">DATA-DRIVEN &middot; NO OPINIONS, NO PUNDITS</p>
+    <h1 class="title">World Cup 2026<br>Final Predictor</h1>
+    <p class="subtitle">Elo history, head-to-head record, and live tournament form - backtested at <strong>67.3% accuracy</strong> across this tournament's 101 matches so far.</p>
+
+    <form id="predict-form" class="picker">
+      <div class="team-select team-a">
+        <label for="team_a">Team A</label>
+        <select id="team_a" required>
+          <option value="" disabled selected>Choose team</option>
+          {% for team in teams %}
+          <option value="{{ team }}">{{ team }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div class="team-select team-b">
+        <label for="team_b">Team B</label>
+        <select id="team_b" required>
+          <option value="" disabled selected>Choose team</option>
+          {% for team in teams %}
+          <option value="{{ team }}">{{ team }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <button type="submit" class="predict-btn">Predict</button>
+    </form>
+
+    <p id="error-msg" class="error"></p>
+  </div>
+
+  <div class="panel right-panel">
+    <section id="result" class="scoreboard hidden">
+      <div class="scoreboard-teams">
+        <span id="result-team-a" class="team-name a"></span>
+        <span class="score-display">
+          <span id="score-a" class="digit">0</span>
+          <span class="dash">–</span>
+          <span id="score-b" class="digit">0</span>
+        </span>
+        <span id="result-team-b" class="team-name b"></span>
+      </div>
+
+      <div class="winner-line">
+        Predicted winner: <strong id="winner-name"></strong>
+      </div>
+
+      <div class="prob-bars">
+        <div class="prob-row">
+          <span class="prob-label a" id="prob-label-a"></span>
+          <div class="bar-track">
+            <div id="bar-a" class="bar-fill a"></div>
+          </div>
+          <span class="prob-pct" id="prob-pct-a"></span>
+        </div>
+        <div class="prob-row">
+          <span class="prob-label b" id="prob-label-b"></span>
+          <div class="bar-track">
+            <div id="bar-b" class="bar-fill b"></div>
+          </div>
+          <span class="prob-pct" id="prob-pct-b"></span>
+        </div>
+      </div>
+
+      <p class="note">Draw probability from 90 minutes is folded into each side per extra-time/penalty edge - a knockout match can't end level.</p>
+    </section>
+
+    <div id="placeholder" class="placeholder">
+      <span>Pick both teams and hit Predict -<br>the result will appear here.</span>
+    </div>
+  </div>
+</main>
+<script src="/static/script.js"></script>
+</body>
+</html>

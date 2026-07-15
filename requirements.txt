@@ -9,3 +9,5 @@ requests
 beautifulsoup4
 lxml
 jupyter
+python-dotenv
+flask
