@@ -55,7 +55,6 @@ python src/backtest_2026.py        # validate on real 2026 matches
 
 **Backtest**: validated against all 103 real World Cup 2026 matches played before the final — **63.1% accuracy** (65/103 correct).
 
-*Baseline for comparison: random guessing across 3 outcomes = 33.3% accuracy.*
 
 ## Predict a match
 
