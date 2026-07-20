@@ -34,7 +34,9 @@ def load_models():
     reg_b_name = joblib.load(f"{MODELS_DIR}/score_b_best_name.pkl")
     scaler_a = joblib.load(f"{MODELS_DIR}/score_a_scaler.pkl")
     scaler_b = joblib.load(f"{MODELS_DIR}/score_b_scaler.pkl")
-    return clf, le, reg_a, reg_b, reg_a_name, reg_b_name, scaler_a, scaler_b
+    clf_name = joblib.load(f"{MODELS_DIR}/best_classifier_name.pkl")
+    clf_scaler = joblib.load(f"{MODELS_DIR}/feature_scaler.pkl")
+    return clf, le, reg_a, reg_b, reg_a_name, reg_b_name, scaler_a, scaler_b , clf_name , clf_scaler
 
 
 def predict_with_regressor(model, model_name, scaler, X):
@@ -81,12 +83,13 @@ def redistribute_draw_probability(prob_a, prob_draw, prob_b):
 
 
 def predict_final(team_a: str, team_b: str):
-    clf, le, reg_a, reg_b, reg_a_name, reg_b_name, scaler_a, scaler_b = load_models()
+    clf, le, reg_a, reg_b, reg_a_name, reg_b_name, scaler_a, scaler_b, clf_name, clf_scaler = load_models()
 
     raw_features = build_match_features(team_a, team_b)
     X = prepare_feature_row(raw_features)
 
-    probs = clf.predict_proba(X)[0]
+    X_for_clf = clf_scaler.transform(X) if clf_name == "logistic_regression" else X
+    probs = clf.predict_proba(X_for_clf)[0]
     prob_dict = dict(zip(le.classes_, probs))
     prob_a_win = prob_dict.get("A_win", 0)
     prob_draw = prob_dict.get("Draw", 0)
