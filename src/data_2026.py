@@ -21,15 +21,25 @@ def fetch_latest_results() -> pd.DataFrame:
     return df
 
 
-def get_2026_world_cup_matches(df: pd.DataFrame) -> pd.DataFrame:
+
+
+def get_2026_world_cup_matches(df: pd.DataFrame, cutoff_date: str = None) -> pd.DataFrame:
+    """
+    cutoff_date: if provided, excludes any match on or after this date.
+    Use this to reconstruct the pre-final data state even if the source
+    dataset has since been updated with later results.
+    """
     wc2026 = df[
         (df["tournament"] == "FIFA World Cup") &
         (df["date"] >= "2026-06-11") &
         (df["date"] <= "2026-07-19")
     ].copy()
+
+    if cutoff_date:
+        wc2026 = wc2026[wc2026["date"] < cutoff_date]
+
     wc2026 = wc2026.sort_values("date").reset_index(drop=True)
     return wc2026
-
 
 def build_team_tournament_summary(matches_df: pd.DataFrame) -> pd.DataFrame:
     """Aggregate team-level stats across all 2026 matches played so far (excludes the final by date if not yet played)."""
@@ -69,7 +79,8 @@ if __name__ == "__main__":
     print("Fetching latest match data...")
     all_matches = fetch_latest_results()
 
-    wc2026 = get_2026_world_cup_matches(all_matches)
+    CUTOFF = "2026-07-19"
+    wc2026 = get_2026_world_cup_matches(all_matches, cutoff_date=CUTOFF)
     wc2026.to_csv(f"{RAW_DIR}/wc2026_matches_raw.csv", index=False)
     print(f"Found {len(wc2026)} World Cup 2026 rows (played + scheduled).")
 

@@ -30,10 +30,32 @@ API_FOOTBALL_KEY=your_key_here
 python src/data_historical.py      # historical matches
 python src/data_2026.py            # 2026 tournament matches
 python src/elo.py                  # Elo ratings
+python src/features.py 
 python src/build_training_data.py  # leakage-safe training set
 python src/train_model.py          # train + compare models (MLflow)
 python src/backtest_2026.py        # validate on real 2026 matches
 ```
+## Model Performance
+
+**Outcome classifier** (Win / Draw / Loss) — compared 4 models, selected by accuracy:
+
+| Model | Accuracy | Log Loss |
+|---|---|---|
+| **Logistic Regression** ✅ | **57.8%** | **0.941** |
+| Random Forest | 56.3% | 0.959 |
+| XGBoost | 54.8% | 0.991 |
+| Gradient Boosting | 52.5% | 1.006 |
+
+**Scoreline regressors** (goals per side) — compared 3 models per side, selected by MAE:
+
+| Team | Model | MAE (goals) |
+|---|---|---|
+| Team A score | **XGBoost (Poisson)** ✅ | **0.838** |
+| Team B score | **XGBoost (Poisson)** ✅ | **0.957** |
+
+**Backtest**: validated against all 103 real World Cup 2026 matches played before the final — **63.1% accuracy** (65/103 correct).
+
+*Baseline for comparison: random guessing across 3 outcomes = 33.3% accuracy.*
 
 ## Predict a match
 
